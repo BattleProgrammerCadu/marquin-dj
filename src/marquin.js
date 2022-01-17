@@ -65,7 +65,7 @@ client.on("messageCreate", async(msg)=>{
     else if(cmd === 'wallace'){
         let quote = Math.floor(Math.random() * wallaceQuotes.length);
         msg.channel.send(`${wallaceQuotes[quote]}`);
-    }else if(cmd === 'play'){
+    }else if(cmd === 'play' || cmd === 'p'){
         let search = args.join(" ");
         let channel = msg.member.voice.channel;
         let queue = distube.getQueue(msg.guildId);
@@ -76,6 +76,29 @@ client.on("messageCreate", async(msg)=>{
             return msg.reply('Fala direito caralho');
         }
         distube.play(msg, search);
+    }else if(cmd === 'skip'){
+        let channel = msg.member.voice.channel;
+        let queue = distube.getQueue(msg.guild.id);
+        console.log(queue.songs.length);
+        if(!channel){
+          return msg.reply('Entra num canal de audio antes né o burro');
+        }
+        if(queue.songs.length < 2){
+          return msg.reply('Nem tem nada tocando louco');
+        }else{
+          queue.skip();
+          msg.channel.send(`${msg.author} pulou a musica olha só q babaca`);
+        }
+    }else if(cmd === 'stop'){
+      let channel = msg.member.voice.channel;
+      let queue = distube.getQueue(msg.guildId);
+      if(!channel){
+        return msg.reply('Entra num canal de audio antes né o burro');
+      }
+      if(!queue){
+        return msg.reply('Nem tem nada tocando louco');
+      }
+      queue.stop();
     }
 });  
 
